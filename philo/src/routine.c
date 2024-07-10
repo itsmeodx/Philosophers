@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:56:24 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/10 10:01:29 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/10 13:22:42 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,12 @@ void	*routine(void *arg)
 
 bool	philo_eat(t_philo *philo)
 {
-	while (mutex_trylock(philo->right_fork) == false)
+	while (mutex_trylock(philo->right_fork) == false && !philo->data->someone_died)
 		;
 	philo->r_locked = true;
 	if (!print_status(philo, "has taken a fork"))
 		return (false);
-	while (mutex_trylock(philo->left_fork) == false)
+	while (mutex_trylock(philo->left_fork) == false && !philo->data->someone_died)
 		;
 	philo->l_locked = true;
 	if (!print_status(philo, "has taken a fork"))
