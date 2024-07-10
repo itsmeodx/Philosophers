@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 14:23:27 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/06 20:45:31 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/07 18:08:23 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,6 @@ int	main(int ac, char *av[])
 	if (!parse_args(&data, ac, av))
 		return (EXIT_FAILURE);
 	philosophers(&data);
+	free_data(&data);
 	return (EXIT_SUCCESS);
 }

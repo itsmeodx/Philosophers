@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 15:11:45 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/07 14:37:41 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/10 10:06:25 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,30 +23,42 @@ bool	run_monitor(t_data *data)
 	return (true);
 }
 
+void	check_philos(t_data *data)
+{
+	int		i;
+	long	elapsed_time;
+
+	i = -1;
+	while (++i < data->philo_count)
+	{
+		ft_mssleep(1);
+		elapsed_time = get_time(data->start) - data->philos[i].last_meal;
+		if (elapsed_time > data->time_to_die
+			&& !data->philos[i].eaten)
+		{
+			// mutex_lock(&data->print);
+			data->someone_died = true;
+			data->printing = printf("%ld %d died\n", get_time(data->start),
+				data->philos[i].id);
+			data->printing = printf("current_time: %ld\telapsed time: %ld\tlast meal: %ld\t\
+				time to die: %d\n", elapsed_time + data->philos[i].last_meal,
+				elapsed_time, data->philos[i].last_meal, data->time_to_die);
+			// mutex_unlock(&data->print);
+			break ;
+		}
+		mutex_unlock(&data->philos[i].status);
+	}
+}
+
 void	*monitor(void *arg)
 {
 	t_data	*data;
-	int		i;
-	int		total_eaten;
 
 	data = (t_data *)arg;
-	while (true)
+	while (!data->someone_died && data->total_eaten != data->philo_count)
 	{
-		i = -1;
-		while (++i < data->philo_count)
-		{
-			pthread_mutex_lock(&data->philos[i].counter);
-			if (data->philos[i].meal_counter == data->meals
-				&& data->philos[i].eaten == false)
-			{
-				data->philos[i].eaten = true;
-				data->total_eaten++;
-			}
-			pthread_mutex_unlock(&data->philos[i].counter);
-		}
-		if (data->total_eaten == data->philo_count)
-			break ;
+		check_philos(data);
+		ft_mssleep(100);
 	}
-	total_eaten = data->total_eaten;
 	return (NULL);
 }
