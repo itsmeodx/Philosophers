@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:56:24 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/10 13:22:42 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/11 18:23:29 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,25 +28,43 @@ void	*routine(void *arg)
 		if (!philo_think(philo))
 			break ;
 	}
+	ft_mssleep(philo->id);
 	if (philo->r_locked)
 		mutex_unlock(philo->right_fork);
 	if (philo->l_locked)
 		mutex_unlock(philo->left_fork);
-	// printf("philo %d quit\n", philo->id);
 	return (NULL);
+}
+
+bool	take_forks(t_philo *philo)
+{
+	while (mutex_trylock(philo->right_fork) == false
+		&& !philo->data->someone_died)
+		;
+	philo->r_locked = true && !philo->data->someone_died;
+	if (!print_status(philo, "has taken a fork"))
+		return (false);
+	while (mutex_trylock(philo->left_fork) == false
+		&& !philo->data->someone_died)
+		;
+	philo->l_locked = true && !philo->data->someone_died;
+	if (!print_status(philo, "has taken a fork"))
+		return (false);
+	return (true);
+}
+
+bool	put_forks(t_philo *philo)
+{
+	mutex_unlock(philo->left_fork);
+	philo->l_locked = false;
+	mutex_unlock(philo->right_fork);
+	philo->r_locked = false;
+	return (true);
 }
 
 bool	philo_eat(t_philo *philo)
 {
-	while (mutex_trylock(philo->right_fork) == false && !philo->data->someone_died)
-		;
-	philo->r_locked = true;
-	if (!print_status(philo, "has taken a fork"))
-		return (false);
-	while (mutex_trylock(philo->left_fork) == false && !philo->data->someone_died)
-		;
-	philo->l_locked = true;
-	if (!print_status(philo, "has taken a fork"))
+	if (!take_forks(philo))
 		return (false);
 	if (!print_status(philo, "is eating"))
 		return (false);
@@ -58,10 +76,8 @@ bool	philo_eat(t_philo *philo)
 		philo->eaten = true;
 		philo->data->total_eaten++;
 	}
-	mutex_unlock(philo->left_fork);
-	philo->l_locked = false;
-	mutex_unlock(philo->right_fork);
-	philo->r_locked = false;
+	if (!put_forks(philo))
+		return (false);
 	return (true);
 }
 

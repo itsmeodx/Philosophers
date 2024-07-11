@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 14:23:45 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/10 09:59:19 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/11 18:24:04 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ bool				run_threads(t_data *data);
 
 // routine.c
 void				*routine(void *arg);
+bool				take_forks(t_philo *philo);
+bool				put_forks(t_philo *philo);
 bool				philo_eat(t_philo *philo);
 bool				philo_sleep(t_philo *philo);
 bool				philo_think(t_philo *philo);

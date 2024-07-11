@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 15:11:45 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/10 10:06:25 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/10 14:35:37 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,13 @@ void	check_philos(t_data *data)
 		if (elapsed_time > data->time_to_die
 			&& !data->philos[i].eaten)
 		{
-			// mutex_lock(&data->print);
 			data->someone_died = true;
 			data->printing = printf("%ld %d died\n", get_time(data->start),
-				data->philos[i].id);
-			data->printing = printf("current_time: %ld\telapsed time: %ld\tlast meal: %ld\t\
-				time to die: %d\n", elapsed_time + data->philos[i].last_meal,
-				elapsed_time, data->philos[i].last_meal, data->time_to_die);
-			// mutex_unlock(&data->print);
+					data->philos[i].id);
+			data->printing = printf("current_time: %ld\telapsed time: %ld\t\
+			last meal: %ld\ttime to die: %d\n", elapsed_time + \
+			data->philos[i].last_meal,
+					elapsed_time, data->philos[i].last_meal, data->time_to_die);
 			break ;
 		}
 		mutex_unlock(&data->philos[i].status);
