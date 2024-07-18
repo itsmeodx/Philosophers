@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:56:24 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/12 19:35:49 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/18 19:12:25 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	*routine(void *arg)
 		if (!philo_think(philo))
 			break ;
 	}
-	ft_mssleep(philo->id);
 	if (philo->r_locked)
 		mutex_unlock(philo->right_fork);
 	if (philo->l_locked)
@@ -67,5 +66,6 @@ bool	philo_think(t_philo *philo)
 {
 	if (!print_status(philo, "is thinking"))
 		return (false);
+	ft_mssleep(1);
 	return (true);
 }

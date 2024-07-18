@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 14:55:45 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/08 19:07:45 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/18 15:36:59 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ bool	data_init(t_data *data)
 	if (!data->philos || !data->forks)
 		return (free_data(data), false);
 	if (!mutex_init(&data->print))
-		return (free_data(data), false);
-	if (gettimeofday(&data->start, NULL) == -1)
 		return (free_data(data), false);
 	return (true);
 }
@@ -49,5 +47,7 @@ bool	philo_init(t_data *data)
 		if (!mutex_init(&data->philos[i].status))
 			return (free_data(data), false);
 	}
+	if (gettimeofday(&data->start, NULL) == -1)
+		return (free_data(data), false);
 	return (true);
 }

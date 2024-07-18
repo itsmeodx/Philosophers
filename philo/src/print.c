@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 15:10:19 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/11 16:51:35 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/18 16:02:24 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 
 bool	print_status(t_philo *philo, char *message)
 {
-	if (philo->data->someone_died
-		|| philo->data->total_eaten == philo->data->philo_count)
+	if (philo->data->someone_died || philo->eaten)
 	{
 		if (philo->r_locked)
 			mutex_unlock(philo->right_fork);

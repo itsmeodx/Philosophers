@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:16:37 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/11 23:10:37 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/18 14:49:00 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,5 @@ void	free_data(t_data *data)
 	}
 	free(data->philos);
 	free(data->forks);
+	free(data);
 }

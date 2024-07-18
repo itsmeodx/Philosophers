@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 15:11:45 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/10 14:35:37 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/18 15:35:31 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void	check_philos(t_data *data)
 					elapsed_time, data->philos[i].last_meal, data->time_to_die);
 			break ;
 		}
-		mutex_unlock(&data->philos[i].status);
 	}
 }
 
