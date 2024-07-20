@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 21:27:04 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/18 17:00:17 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/18 19:37:47 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,9 @@ void				*routine(void *arg);
 bool				philo_eat(t_philo *philo);
 bool				philo_sleep(t_philo *philo);
 bool				philo_think(t_philo *philo);
+
+// sem_bonus.c
+bool				ft_sem_trywait(sem_t *sem);
 
 // sleep_bonus.c
 void				ft_mssleep(long time);

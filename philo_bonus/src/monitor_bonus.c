@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 15:11:45 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/18 17:16:02 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/18 20:42:34 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,6 @@ void	check_philo(t_philo *philo)
 		sem_wait(philo->data->print);
 		philo->data->printing = printf("%ld %d died\n",
 				get_time(philo->data->start), philo->id);
-		philo->data->printing = printf("current_time: %ld\telapsed time: %ld\t\
-				last meal: %ld\ttime to die: %d\n",
-				elapsed_time + philo->last_meal,
-				elapsed_time,
-				philo->last_meal,
-				philo->data->time_to_die);
 	}
 }
 
@@ -50,8 +44,8 @@ void	*monitor(void *arg)
 	while (!philo->died && !philo->eaten)
 	{
 		check_philo(philo);
-		// if (philo->died || philo->eaten)
-		// 	break ;
+		if (philo->died || philo->eaten)
+			break ;
 		ft_mssleep(100);
 	}
 	return (NULL);

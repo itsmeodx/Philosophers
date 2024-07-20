@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:58:38 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/18 17:16:02 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/18 19:26:28 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,6 @@
 
 void	run_process(t_philo *philo)
 {
-	philo->left_fork = sem_open("forks", O_CREAT, 0644,
-			philo->data->philo_count);
-	philo->right_fork = sem_open("forks", O_CREAT, 0644,
-			philo->data->philo_count);
 	if (!run_monitor(philo))
 		ft_exit(philo->data, EXIT_FAILURE, "Error: run_monitor failed\n");
 	routine(philo);
