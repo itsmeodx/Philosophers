@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:56:24 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/18 19:12:25 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/20 16:02:36 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ bool	philo_eat(t_philo *philo)
 		return (false);
 	if (!print_status(philo, "is eating"))
 		return (false);
+	mutex_lock(&philo->status);
 	philo->last_meal = get_time(philo->data->start);
 	ft_mssleep(philo->data->time_to_eat);
 	philo->meal_counter++;
@@ -49,6 +50,7 @@ bool	philo_eat(t_philo *philo)
 		philo->eaten = true;
 		philo->data->total_eaten++;
 	}
+	mutex_unlock(&philo->status);
 	if (!put_forks(philo))
 		return (false);
 	return (true);
@@ -66,6 +68,6 @@ bool	philo_think(t_philo *philo)
 {
 	if (!print_status(philo, "is thinking"))
 		return (false);
-	ft_mssleep(1);
+	usleep(100);
 	return (true);
 }

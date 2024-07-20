@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 14:23:45 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/11 23:12:28 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/20 16:12:09 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ time_to_die time_to_eat time_to_sleep [number_of_meals]\n"
 
 typedef struct s_mutex
 {
-	_Atomic bool	locked;
+	pthread_mutex_t	lock;
+	bool			locked;
 	pthread_mutex_t	mutex;
 }					t_mutex;
 
@@ -38,8 +39,8 @@ typedef struct s_philo
 	int				meal_counter;
 	bool			r_locked;
 	bool			l_locked;
-	_Atomic bool	eaten;
-	_Atomic long	last_meal;
+	bool			eaten;
+	long			last_meal;
 	struct s_mutex	status;
 	struct s_mutex	*left_fork;
 	struct s_mutex	*right_fork;
@@ -53,9 +54,9 @@ typedef struct s_data
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				meals;
-	_Atomic int		total_eaten;
+	int				total_eaten;
 	_Atomic bool	someone_died;
-	_Atomic bool	printing;
+	bool			printing;
 	struct s_philo	*philos;
 	struct s_mutex	*forks;
 	struct s_mutex	print;
