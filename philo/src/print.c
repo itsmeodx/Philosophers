@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 15:10:19 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/20 15:58:59 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/24 19:40:44 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ bool	print_status(t_philo *philo, char *message)
 		mutex_unlock(&philo->data->print);
 		return (false);
 	}
-	printf("%ld %d %s\n", \
-	get_time(philo->data->start), philo->id, message);
+	printf("%ld %d %s\n", get_time(philo->data->start), philo->id, message);
 	mutex_unlock(&philo->data->print);
 	return (true);
 }

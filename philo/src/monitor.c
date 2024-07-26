@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 15:11:45 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/20 16:14:17 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/22 11:04:22 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void	check_philos(t_data *data)
 	i = -1;
 	while (++i < data->philo_count)
 	{
-		ft_mssleep(1);
 		mutex_lock(&data->philos[i].status);
 		elapsed_time = get_time(data->start) - data->philos[i].last_meal;
 		if (elapsed_time > data->time_to_die
@@ -54,14 +53,12 @@ void	*monitor(void *arg)
 	t_data	*data;
 
 	data = (t_data *)arg;
-	while (true)
+	while (!data->someone_died && data->total_eaten != data->philo_count)
 	{
-		if (data->someone_died || data->total_eaten == data->philo_count)
-			break ;
 		check_philos(data);
 		if (data->someone_died || data->total_eaten == data->philo_count)
 			break ;
-		ft_mssleep(100);
+		ft_mssleep(10);
 	}
 	return (NULL);
 }

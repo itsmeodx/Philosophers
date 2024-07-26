@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 14:23:45 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/20 16:12:09 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/22 10:44:58 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ typedef struct s_data
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				meals;
-	int				total_eaten;
+	_Atomic int		total_eaten;
 	_Atomic bool	someone_died;
 	bool			printing;
 	struct s_philo	*philos;

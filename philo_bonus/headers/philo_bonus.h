@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 21:27:04 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/18 19:37:47 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/26 19:40:28 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,28 @@
 # define USAGE \
 	"Usage: ./philo number_of_philosophers \
 time_to_die time_to_eat time_to_sleep [number_of_meals]\n"
+# define TAKE "%ld %d has taken a fork\n"
+# define EAT "%ld %d is eating\n"
+# define SLEEP "%ld %d is sleeping\n"
+# define THINK "%ld %d is thinking\n"
+# define DIED "%ld %d died\n"
 
 typedef char		*t_string;
+
 typedef struct s_philo
 {
 	int				id;
+	pthread_t		thread;
 	pthread_t		monitor;
 	int				meal_counter;
 	_Atomic bool	died;
 	bool			r_locked;
 	bool			l_locked;
+	bool			s_locked;
 	_Atomic bool	eaten;
-	_Atomic long	last_meal;
+	long			last_meal;
+	t_string		name;
+	sem_t			*status;
 	sem_t			*left_fork;
 	sem_t			*right_fork;
 	struct s_data	*data;
@@ -53,8 +63,10 @@ typedef struct s_data
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				meals;
-	_Atomic bool	printing;
 	struct s_philo	*philos;
+	sem_t			*starting;
+	sem_t			*exitted;
+	sem_t			*killall;
 	sem_t			*forks;
 	sem_t			*print;
 	struct timeval	start;
@@ -80,14 +92,14 @@ bool				philo_init(t_data *data);
 
 // monitor_bonus.c
 bool				run_monitor(t_philo *philo);
-void				check_philo(t_philo *philo);
+bool				check_philo(t_philo *philo);
 void				*monitor(void *arg);
 
 // parse_bonus.c
 bool				parse_args(t_data *data, int ac, char *av[]);
 
 // philosophers_bonus.c
-void				run_process(t_philo *philo);
+bool				run_process(t_philo *philo);
 int					philosophers(t_data *data);
 
 // print_bonus.c
@@ -100,7 +112,9 @@ bool				philo_sleep(t_philo *philo);
 bool				philo_think(t_philo *philo);
 
 // sem_bonus.c
+bool				ft_sem_open(sem_t **sem, t_string name, int value);
 bool				ft_sem_trywait(sem_t *sem);
+long int			ft_sem_getvalue(sem_t *sem);
 
 // sleep_bonus.c
 void				ft_mssleep(long time);
@@ -113,5 +127,6 @@ long				get_time(struct timeval start);
 size_t				ft_strlen(const t_string s);
 int					ft_atoi(const t_string nptr);
 t_string			ft_itoa(int m);
+t_string			ft_strdup(t_string s);
 
 #endif // PHILO_BONUS_H

@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 14:55:45 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/18 17:16:02 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/25 19:03:28 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,16 @@ bool	data_init(t_data *data)
 	data->pids = malloc(sizeof(pid_t) * data->philo_count);
 	if (data->pids)
 		memset(data->pids, 0, sizeof(pid_t) * data->philo_count);
-	sem_unlink("forks");
-	data->forks = sem_open("forks", O_CREAT | O_EXCL, 0644, data->philo_count);
-	if (data->forks == SEM_FAILED)
-		return (printf("Error: sem_open: can't open forks\n"), free_data(data),
-			false);
-	sem_unlink("print");
-	data->print = sem_open("print", O_CREAT | O_EXCL, 0644, 1);
-	if (data->print == SEM_FAILED)
-		return (printf("Error: sem_open: can't open print\n"), free_data(data),
-			false);
+	if (!ft_sem_open(&data->forks, "forks", data->philo_count))
+		return (free_data(data), false);
+	if (!ft_sem_open(&data->print, "print", 1))
+		return (free_data(data), false);
+	if (!ft_sem_open(&data->killall, "killall", 0))
+		return (free_data(data), false);
+	if (!ft_sem_open(&data->exitted, "exitted", 0))
+		return (free_data(data), false);
+	if (!ft_sem_open(&data->starting, "starting", data->philo_count - 1))
+		return (free_data(data), false);
 	if (!data->philos || !data->pids)
 		return (free_data(data), false);
 	return (true);
@@ -69,8 +69,11 @@ bool	philo_init(t_data *data)
 		data->philos[i].data = data;
 		data->philos[i].right_fork = data->forks;
 		data->philos[i].left_fork = data->forks;
+		data->philos[i].name = get_sem_name("status ", i + 1);
+		if (!data->philos[i].name)
+			return (free_data(data), false);
+		if (!ft_sem_open(&data->philos[i].status, data->philos[i].name, 1))
+			return (free_data(data), false);
 	}
-	if (gettimeofday(&data->start, NULL) == -1)
-		return (free_data(data), false);
 	return (true);
 }

@@ -6,54 +6,57 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:58:38 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/18 19:26:28 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/26 20:26:18 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-void	run_process(t_philo *philo)
+bool	run_process(t_philo *philo)
 {
-	if (!run_monitor(philo))
-		ft_exit(philo->data, EXIT_FAILURE, "Error: run_monitor failed\n");
+	if (pthread_create(&philo->monitor, NULL, &monitor, philo) != 0)
+		return (printf("Error: pthread_create: failed to create monitor\n"),
+			false);
 	routine(philo);
+	if (pthread_join(philo->monitor, NULL) != 0)
+		return (printf("Error: pthread_join: failed to join monitor\n"), false);
 	ft_exit(philo->data, EXIT_SUCCESS, NULL);
+	return (true);
 }
 
-bool	check_death(t_data *data, int i)
+void	ft_killall(t_data *data, int i)
 {
-	int		status;
-	pid_t	died;
-
-	died = 0;
-	while (died != -1)
+	while (i--)
 	{
-		died = wait(&status);
-		if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_FAILURE)
-		{
-			while (i--)
-			{
-				if (data->pids[i] != died)
-					kill(data->pids[i], SIGKILL);
-			}
-			return (EXIT_FAILURE);
-		}
+		if (data->pids[i] != 0)
+			kill(data->pids[i], SIGKILL);
 	}
-	return (EXIT_SUCCESS);
+	ft_exit(data, EXIT_FAILURE, NULL);
 }
 
 int	philosophers(t_data *data)
 {
 	int		i;
+	int		exitted;
 
 	i = -1;
+	if (gettimeofday(&data->start, NULL) == -1)
+		return (free_data(data), false);
 	while (++i < data->philo_count)
 	{
-		data->pids[i] = ft_fork(data);
+		data->pids[i] = fork();
 		if (data->pids[i] == 0)
 			run_process(&data->philos[i]);
 	}
-	if (!check_death(data, i))
-		return (EXIT_FAILURE);
+	sem_post(data->starting);
+	exitted = -1;
+	while (ft_sem_trywait(data->killall) == false
+		&& exitted != data->philo_count)
+	{
+		usleep(1 * 1000);
+		exitted = ft_sem_getvalue(data->exitted);
+	}
+	if (exitted != data->philo_count)
+		ft_killall(data, i);
 	return (EXIT_SUCCESS);
 }

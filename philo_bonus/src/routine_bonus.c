@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:56:24 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/18 19:07:44 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/26 20:23:55 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,55 +17,57 @@ void	*routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	if (philo->id % 2 == 0)
-		ft_mssleep(50);
-	while (!philo->died || !philo->eaten)
+	while (!philo->died && !philo->eaten)
 	{
-		if (!philo_eat(philo))
-			break ;
-		if (!philo_sleep(philo))
-			break ;
-		if (!philo_think(philo))
-			break ;
+		philo_eat(philo);
+		philo_sleep(philo);
+		philo_think(philo);
 	}
-	if (philo->r_locked)
-		sem_post(philo->right_fork);
-	if (philo->l_locked)
-		sem_post(philo->left_fork);
-	pthread_join(philo->monitor, NULL);
-	if (philo->died)
-		ft_exit(philo->data, EXIT_FAILURE, NULL);
+	sem_post(philo->data->exitted);
 	return (NULL);
 }
 
 bool	philo_eat(t_philo *philo)
 {
-	if (!take_forks(philo))
-		return (false);
-	if (!print_status(philo, "is eating"))
-		return (false);
+	sem_wait(philo->right_fork);
+	sem_wait(philo->data->print);
+	printf(TAKE, get_time(philo->data->start), philo->id);
+	sem_post(philo->data->print);
+	sem_wait(philo->left_fork);
+	sem_wait(philo->data->print);
+	printf(TAKE, get_time(philo->data->start), philo->id);
+	printf(EAT, get_time(philo->data->start), philo->id);
+	sem_post(philo->data->print);
+	sem_wait(philo->status);
 	philo->last_meal = get_time(philo->data->start);
-	ft_mssleep(philo->data->time_to_eat);
+	usleep(philo->data->time_to_eat * 1000);
 	philo->meal_counter++;
 	if (philo->meal_counter == philo->data->meals)
 		philo->eaten = true;
-	if (!put_forks(philo))
-		return (false);
+	sem_post(philo->status);
+	sem_post(philo->right_fork);
+	sem_post(philo->left_fork);
 	return (true);
 }
 
 bool	philo_sleep(t_philo *philo)
 {
-	if (!print_status(philo, "is sleeping"))
-		return (false);
-	ft_mssleep(philo->data->time_to_sleep);
+	if (philo->eaten)
+		return (true);
+	sem_wait(philo->data->print);
+	printf(SLEEP, get_time(philo->data->start), philo->id);
+	sem_post(philo->data->print);
+	usleep(philo->data->time_to_sleep * 1000);
 	return (true);
 }
 
 bool	philo_think(t_philo *philo)
 {
-	if (!print_status(philo, "is thinking"))
-		return (false);
-	ft_mssleep(1);
+	if (philo->eaten)
+		return (true);
+	sem_wait(philo->data->print);
+	printf(THINK, get_time(philo->data->start), philo->id);
+	sem_post(philo->data->print);
+	usleep(1 * 1000);
 	return (true);
 }
