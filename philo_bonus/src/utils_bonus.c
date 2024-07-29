@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:17:28 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/24 10:47:03 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/26 20:30:03 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,24 +92,4 @@ t_string	ft_itoa(int m)
 		n /= 10;
 	}
 	return (s);
-}
-
-t_string	ft_strdup(t_string s)
-{
-	size_t		len;
-	size_t		i;
-	t_string	dup_str;
-
-	if (!s)
-		return (NULL);
-	len = 0;
-	while (s[len])
-		len++;
-	dup_str = (char *)malloc(len);
-	if (dup_str == NULL)
-		return (NULL);
-	i = -1;
-	while (s[++i])
-		dup_str[i] = s[i];
-	return (dup_str);
 }

@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 15:11:45 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/26 20:02:03 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/27 12:03:33 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,12 @@ void	*monitor(void *arg)
 			philo->died = true;
 			sem_wait(philo->data->print);
 			printf(DIED, get_time(philo->data->start), philo->id);
-			printf("current time: %ld  elapsed time: %ld  last meal: %ld  meal counter %d time to die: %d\n",
-				get_time(philo->data->start), elapsed_time, philo->last_meal, philo->meal_counter, philo->data->time_to_die);
 			sem_post(philo->data->killall);
 			sem_post(philo->status);
 			return (false);
 		}
 		sem_post(philo->status);
-		usleep(9 * 1000);
+		usleep(9 * MS);
 	}
 	return (NULL);
 }
