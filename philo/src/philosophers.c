@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:58:38 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/08 15:00:37 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/27 11:59:52 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,15 @@
 
 int	philosophers(t_data *data)
 {
-	int		i;
+	pthread_t	monitor_thread;
+	int			i;
 
 	if (!run_threads(data))
 		return (printf("Error: run_threads\n"), EXIT_FAILURE);
-	if (!run_monitor(data))
-		return (printf("Error: run_monitor\n"), EXIT_FAILURE);
+	if (pthread_create(&monitor_thread, NULL, &monitor, data) != 0)
+		return (printf("Error: pthread_create\n"), EXIT_FAILURE);
+	if (pthread_join(monitor_thread, NULL) != 0)
+		return (printf("Error: pthread_detach\n"), EXIT_FAILURE);
 	i = -1;
 	while (++i < data->philo_count)
 		if (pthread_join(data->philos[i].thread, NULL) != 0)

@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:56:24 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/20 16:02:36 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/27 11:31:47 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,11 @@ void	*routine(void *arg)
 	philo = (t_philo *)arg;
 	if (philo->id % 2 == 0)
 		ft_mssleep(50);
-	while (!philo->data->someone_died || !philo->eaten)
+	while (!philo->data->someone_died && !philo->eaten)
 	{
-		if (!philo_eat(philo))
-			break ;
-		if (!philo_sleep(philo))
-			break ;
-		if (!philo_think(philo))
-			break ;
+		philo_eat(philo);
+		philo_sleep(philo);
+		philo_think(philo);
 	}
 	if (philo->r_locked)
 		mutex_unlock(philo->right_fork);
@@ -35,12 +32,14 @@ void	*routine(void *arg)
 	return (NULL);
 }
 
-bool	philo_eat(t_philo *philo)
+void	philo_eat(t_philo *philo)
 {
 	if (!take_forks(philo))
-		return (false);
-	if (!print_status(philo, "is eating"))
-		return (false);
+		return ;
+	if (philo->data->someone_died || philo->eaten)
+		return (mutex_unlock(&philo->data->print), (void)false);
+	printf(EAT, get_time(philo->data->start), philo->id);
+	mutex_unlock(&philo->data->print);
 	mutex_lock(&philo->status);
 	philo->last_meal = get_time(philo->data->start);
 	ft_mssleep(philo->data->time_to_eat);
@@ -51,23 +50,29 @@ bool	philo_eat(t_philo *philo)
 		philo->data->total_eaten++;
 	}
 	mutex_unlock(&philo->status);
-	if (!put_forks(philo))
-		return (false);
-	return (true);
+	mutex_unlock(philo->right_fork);
+	philo->r_locked = false;
+	mutex_unlock(philo->left_fork);
+	philo->l_locked = false;
+	return ;
 }
 
-bool	philo_sleep(t_philo *philo)
+void	philo_sleep(t_philo *philo)
 {
-	if (!print_status(philo, "is sleeping"))
-		return (false);
+	mutex_lock(&philo->data->print);
+	if (philo->data->someone_died || philo->eaten)
+		return (mutex_unlock(&philo->data->print), (void)false);
+	printf(SLEEP, get_time(philo->data->start), philo->id);
+	mutex_unlock(&philo->data->print);
 	ft_mssleep(philo->data->time_to_sleep);
-	return (true);
 }
 
-bool	philo_think(t_philo *philo)
+void	philo_think(t_philo *philo)
 {
-	if (!print_status(philo, "is thinking"))
-		return (false);
+	mutex_lock(&philo->data->print);
+	if (philo->data->someone_died || philo->eaten)
+		return (mutex_unlock(&philo->data->print), (void)false);
+	printf(THINK, get_time(philo->data->start), philo->id);
+	mutex_unlock(&philo->data->print);
 	usleep(100);
-	return (true);
 }

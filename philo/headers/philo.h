@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 14:23:45 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/22 10:44:58 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/27 11:33:26 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@
 # define USAGE \
 	"Usage: ./philo number_of_philosophers \
 time_to_die time_to_eat time_to_sleep [number_of_meals]\n"
+# define TAKE "%ld %d has taken a fork\n"
+# define EAT "%ld %d is eating\n"
+# define SLEEP "%ld %d is sleeping\n"
+# define THINK "%ld %d is thinking\n"
+# define DIED "%ld %d died\n"
 
 typedef struct s_mutex
 {
@@ -63,6 +68,11 @@ typedef struct s_data
 	struct timeval	start;
 }					t_data;
 
+// forks.c
+bool				right_left(t_philo *philo);
+bool				left_right(t_philo *philo);
+bool				take_forks(t_philo *philo);
+
 // free.c
 void				free_data(t_data *data);
 
@@ -91,17 +101,14 @@ bool				run_threads(t_data *data);
 
 // routine.c
 void				*routine(void *arg);
-bool				take_forks(t_philo *philo);
-bool				put_forks(t_philo *philo);
-bool				philo_eat(t_philo *philo);
-bool				philo_sleep(t_philo *philo);
-bool				philo_think(t_philo *philo);
+void				philo_eat(t_philo *philo);
+void				philo_sleep(t_philo *philo);
+void				philo_think(t_philo *philo);
 
 // sleep.c
 void				ft_mssleep(long time);
 
 // time.c
-int					timetoms(struct timeval time);
 long				get_time(struct timeval start);
 
 // print.c

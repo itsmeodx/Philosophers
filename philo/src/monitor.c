@@ -6,22 +6,11 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 15:11:45 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/22 11:04:22 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/27 11:53:07 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-bool	run_monitor(t_data *data)
-{
-	pthread_t	monitor_thread;
-
-	if (pthread_create(&monitor_thread, NULL, &monitor, data) != 0)
-		return (printf("Error: pthread_create\n"), false);
-	if (pthread_join(monitor_thread, NULL) != 0)
-		return (printf("Error: pthread_detach\n"), false);
-	return (true);
-}
 
 void	check_philos(t_data *data)
 {

@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 19:35:27 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/20 16:13:47 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/07/27 11:28:41 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,45 @@
 
 bool	right_left(t_philo *philo)
 {
-	while (mutex_trylock(philo->right_fork) == false
-		&& !philo->data->someone_died)
-		;
-	philo->r_locked = true && !philo->data->someone_died;
-	if (!print_status(philo, "has taken a fork"))
+	while (!philo->r_locked && !philo->data->someone_died)
+		philo->r_locked = mutex_trylock(philo->right_fork);
+	if (philo->data->someone_died)
 		return (false);
-	while (mutex_trylock(philo->left_fork) == false
-		&& !philo->data->someone_died)
-		;
-	philo->l_locked = true && !philo->data->someone_died;
-	if (!print_status(philo, "has taken a fork"))
+	mutex_lock(&philo->data->print);
+	if (philo->data->someone_died || philo->eaten)
+		return (mutex_unlock(&philo->data->print), false);
+	printf(TAKE, get_time(philo->data->start), philo->id);
+	mutex_unlock(&philo->data->print);
+	while (!philo->l_locked && !philo->data->someone_died)
+		philo->l_locked = mutex_trylock(philo->left_fork);
+	if (philo->data->someone_died)
 		return (false);
+	mutex_lock(&philo->data->print);
+	if (philo->data->someone_died || philo->eaten)
+		return (mutex_unlock(&philo->data->print), false);
+	printf(TAKE, get_time(philo->data->start), philo->id);
 	return (true);
 }
 
 bool	left_right(t_philo *philo)
 {
-	while (mutex_trylock(philo->left_fork) == false
-		&& !philo->data->someone_died)
-		;
-	philo->l_locked = true && !philo->data->someone_died;
-	if (!print_status(philo, "has taken a fork"))
+	while (!philo->l_locked && !philo->data->someone_died)
+		philo->l_locked = mutex_trylock(philo->left_fork);
+	if (philo->data->someone_died)
 		return (false);
-	while (mutex_trylock(philo->right_fork) == false
-		&& !philo->data->someone_died)
-		;
-	philo->r_locked = true && !philo->data->someone_died;
-	if (!print_status(philo, "has taken a fork"))
+	mutex_lock(&philo->data->print);
+	if (philo->data->someone_died || philo->eaten)
+		return (mutex_unlock(&philo->data->print), false);
+	printf(TAKE, get_time(philo->data->start), philo->id);
+	mutex_unlock(&philo->data->print);
+	while (!philo->r_locked && !philo->data->someone_died)
+		philo->r_locked = mutex_trylock(philo->right_fork);
+	if (philo->data->someone_died)
 		return (false);
+	mutex_lock(&philo->data->print);
+	if (philo->data->someone_died || philo->eaten)
+		return (mutex_unlock(&philo->data->print), false);
+	printf(TAKE, get_time(philo->data->start), philo->id);
 	return (true);
 }
 
@@ -58,14 +68,5 @@ bool	take_forks(t_philo *philo)
 		if (!left_right(philo))
 			return (false);
 	}
-	return (true);
-}
-
-bool	put_forks(t_philo *philo)
-{
-	mutex_unlock(philo->right_fork);
-	philo->r_locked = false;
-	mutex_unlock(philo->left_fork);
-	philo->l_locked = false;
 	return (true);
 }
