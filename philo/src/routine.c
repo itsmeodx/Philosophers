@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 16:56:24 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/27 11:31:47 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/08/10 13:32:49 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,5 @@ void	philo_think(t_philo *philo)
 		return (mutex_unlock(&philo->data->print), (void)false);
 	printf(THINK, get_time(philo->data->start), philo->id);
 	mutex_unlock(&philo->data->print);
-	usleep(100);
+	usleep(500);
 }
