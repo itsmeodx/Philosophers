@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 14:23:45 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/27 11:33:26 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/10/05 19:03:13 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@
 # define USAGE \
 	"Usage: ./philo number_of_philosophers \
 time_to_die time_to_eat time_to_sleep [number_of_meals]\n"
-# define TAKE "%ld %d has taken a fork\n"
-# define EAT "%ld %d is eating\n"
-# define SLEEP "%ld %d is sleeping\n"
-# define THINK "%ld %d is thinking\n"
-# define DIED "%ld %d died\n"
+# define TAKE "\033[0;34m%ld %d has taken a fork\033[0m\n"
+# define EAT "\033[0;32m%ld %d is eating\033[0m\n"
+# define SLEEP "\033[0;33m%ld %d is sleeping\033[0m\n"
+# define THINK "\033[0;36m%ld %d is thinking\033[0m\n"
+# define DIED "\033[0;31m%ld %d died\033[0m\n"
 
 typedef struct s_mutex
 {

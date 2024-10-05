@@ -6,7 +6,7 @@
 /*   By: oouaadic <oouaadic@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 15:11:45 by oouaadic          #+#    #+#             */
-/*   Updated: 2024/07/27 11:53:07 by oouaadic         ###   ########.fr       */
+/*   Updated: 2024/10/05 19:00:40 by oouaadic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	check_philos(t_data *data)
 		{
 			data->someone_died = true;
 			mutex_lock(&data->print);
-			printf("%ld %d died\n", get_time(data->start),
+			printf(DIED, get_time(data->start),
 				data->philos[i].id);
 			mutex_unlock(&data->print);
 			mutex_unlock(&data->philos[i].status);
